@@ -8,11 +8,11 @@
 
 ### Data EDA and Data Analysis
 
-상병 최재혁 (@)
+상병 최재혁 (@jaehyuk-choi)
 
 ### Frontend 
 
-@
+상병 방진영 (@jinyoungbang)
 
 ### Backend 
 
