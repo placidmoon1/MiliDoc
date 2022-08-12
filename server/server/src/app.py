@@ -16,6 +16,7 @@ auth = firebase.auth()
 db = firebase.database()
 
 @app.route('/')
+@cross_origin
 def index():
   context = {'message':'Hello MiliDoc Server :)'}
   template = render_template('index.html', context=context)
