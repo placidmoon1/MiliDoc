@@ -1,0 +1,44 @@
+.container {
+  padding: 0.25rem 2rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 3rem;
+  border-bottom: 1px solid #d9dadd;
+}
+
+.container h1 {
+  font-family: "Alata";
+  font-size: "larger";
+  font-stretch: "condensed";
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  transition: color 200ms ease;
+}
+
+.container h1:hover {
+  color: #02503a;
+
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0.25rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 320px) {
+  .container {
+    padding: 0.25rem 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
