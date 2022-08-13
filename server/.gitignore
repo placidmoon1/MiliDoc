@@ -1,6 +1,6 @@
 venv/
 node_modules/
-server/src/secrets.py
+server/src/mySecrets.py
 .firebase
 
 *.pyc
