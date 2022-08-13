@@ -19,7 +19,7 @@ def check_text():
     (1) 
   """
   if request.method == "POST":
-    text = request.form["text"].split(' ')
+    text = request.form["text"].split() #split on all whitespace
     sanitized = []
     for word in text:
       sanitized.append(sanitize(word, ""))

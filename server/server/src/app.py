@@ -15,6 +15,9 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 db = firebase.database()
 
+import auth
+app.register_blueprint(auth.bp)
+
 @app.route('/')
 def index():
   context = {'message':'Hello MiliDoc Server :)'}
