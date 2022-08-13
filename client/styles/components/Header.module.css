@@ -20,9 +20,23 @@
   transition: color 200ms ease;
 }
 
-.container h1:hover {
-  color: #02503a;
+.navigationContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
 
+.navigationContainer .iconTextView:hover {
+  font-weight: 700;
+  cursor: pointer;
+  color: #27447c;
+}
+
+.navigationContainer .iconTextView {
+  display:flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 @media (max-width: 768px) {

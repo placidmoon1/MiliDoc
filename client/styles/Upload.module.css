@@ -8,11 +8,42 @@
 
 .inputContainer {
   display: flex;
-  flex-direction: column;
   min-height: 100vh;
   padding: 3rem 2rem;
-  max-width: 1024px;
+  justify-content: center;
+}
+
+.inputContainer section {
+  padding: 0 1rem;
   margin: 0 auto;
+  
+  min-width: 46rem;
+  height: 468px;
+  background: white;
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  .inputContainer section {
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 320px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+}
+
+
+.uploadContainer {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .buttonContainer {
@@ -40,6 +71,6 @@
 }
 
 /* .buttonContainer[disabled]:hover {
-  color: #FFFFFF;
-  background: #27447c;
-} */
+    color: #FFFFFF;
+    background: #27447c;
+  } */
