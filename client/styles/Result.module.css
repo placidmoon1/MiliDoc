@@ -27,6 +27,13 @@
   background-color: white;
 }
 
+.inputContainer hr {
+  height: 1px;
+  width: 4rem;
+  border-top: 7px solid #27447c;
+  margin-top: 5px;
+  margin-bottom: 16px;
+}
 
 
 .buttonContainer {

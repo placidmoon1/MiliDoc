@@ -39,7 +39,7 @@ const Result = () => {
         <div className={styles.inputContainer}>
           <div>
             <h1>{q}</h1>
-            <br />
+            <hr />
             <h3>
               1. 컴퓨터에서, 프로그램을 새로 개발하였을 때에 오류가 없는지
               최종적으로 검사하는 일2. 문자 대신에 그림이나 부호를 사용하여
