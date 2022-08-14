@@ -1,13 +1,10 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { Formik, Form, Field } from "formik";
-import { Textarea, Button, FormControl } from "@chakra-ui/react";
 import Header from "../components/Header";
-import { useRouter } from "next/router";
-import axios from "axios";
+import Card from "../components/Card";
+import { MdDocumentScanner, MdUploadFile, MdSearch } from "react-icons/md";
 
 export default function Home() {
-  const router = useRouter();
   return (
     <div>
       <Head>
@@ -17,59 +14,22 @@ export default function Home() {
       <Header />
       <div className={styles.container}>
         <div className={styles.inputContainer}>
-        <h2>Placeholder text to explain what is happening</h2>
-        <br />
-          <Formik
-            initialValues={{ body: "" }}
-            onSubmit={(values, actions) => {
-              var bodyFormData = new FormData();
-              bodyFormData.append("text", values.body);
-              axios({
-                method: "post",
-                url: process.env.NEXT_PUBLIC_API_ROUTE + "check/text",
-                data: bodyFormData,
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              }).then((res) => {
-                console.log(res);
-                // if (res.status === 201) router.push("/results");
-                // else actions.setSubmitting(false);
-              });
-              actions.setSubmitting(false);
-            }}
-          >
-            {(props) => (
-              <Form>
-                <Field name="body">
-                  {({ field, form }) => (
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        id="body"
-                        resize="none"
-                        style={{
-                          height: "400px",
-                          width: "100%",
-                          backgroundColor: "white",
-                        }}
-                      />
-                    </FormControl>
-                  )}
-                </Field>
-                <div className={styles.buttonContainer}>
-                  <Button
-                    variant="solid"
-                    isDisabled={props.values.body === ""}
-                    isLoading={props.isSubmitting}
-                    type="submit"
-                  >
-                    검사하기
-                  </Button>
-                </div>
-              </Form>
-            )}
-          </Formik>
+          <Card
+            icon={<MdDocumentScanner />}
+            title={"텍스트 분석"}
+            description={"넣고 싶은 글을 넣어주세요! 밀리닥이 당신의 글을 더 완벽하고 정부 규정에 맞게 교정해드립니다."}
+            link={"/analyze"}
+          />
+          <Card
+            icon={<MdSearch />}
+            title={"단어 검색"}
+            description={
+              "궁금하신 단어를 넣어주세요. 밀리닥이 당신을 위해 사전적 정의를 찾거나 번역을 도와드릴 수 있습니다."
+            }
+            link={"/search"}
+          />
+          {/* <Card icon={<MdUploadFile />} title={"텍스트 분석"} />
+          <Card title={"단어 검색"} /> */}
         </div>
       </div>
     </div>
