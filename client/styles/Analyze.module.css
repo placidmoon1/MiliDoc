@@ -8,14 +8,22 @@
 
 .inputContainer {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   min-height: 100vh;
   padding: 3rem 2rem;
   max-width: 1024px;
   margin: 0 auto;
-  justify-content: center;
-  align-content: flex-start;
-  flex-wrap: wrap;
+}
+
+.resultContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin-top: 1rem;
+  padding: 1.5rem 2rem;
+  max-width: 1024px;
+  margin: 0 auto;
+  white-space: pre-wrap;
 }
 
 .buttonContainer {
@@ -43,6 +51,6 @@
 }
 
 /* .buttonContainer[disabled]:hover {
-  color: #FFFFFF;
-  background: #27447c;
-} */
+    color: #FFFFFF;
+    background: #27447c;
+  } */

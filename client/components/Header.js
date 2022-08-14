@@ -8,11 +8,11 @@ const Header = () => {
 
   return (
     <header className={styles.container}>
-      <Image src="/bg_logo.png" width={200} height={50} alt="어플 이름" />
+      <Image src="/logo.png" width={150} height={50} alt="어플 이름" onClick={() => router.push("/")} style={{marginLeft: "-10px", cursor: "pointer"}} />
       <div className={styles.navigationContainer}>
         <div className={styles.iconTextView} style={{ marginRight: "15px" }}>
           <MdDocumentScanner style={{ marginRight: "4px" }} />
-          <h2 onClick={() => router.push("/")}>텍스트 분석</h2>
+          <h2 onClick={() => router.push("/analyze")}>텍스트 분석</h2>
         </div>
         {/* <div className={styles.iconTextView} style={{ marginRight: "15px" }}>
           <MdUploadFile style={{ marginRight: "4px" }} />
