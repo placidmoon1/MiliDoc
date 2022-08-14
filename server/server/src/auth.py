@@ -12,6 +12,7 @@ bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 auth = firebase.auth()
 db = firebase.database()
+CORS(bp)
 
 default_domain = "@rok.mil"
 
@@ -26,8 +27,6 @@ def check_userToken():
   return "invalid request"
 
 @bp.route("/register", methods=("GET", "POST"))
-@cross_origin()
-
 def register():
   """
   Register a new user 
@@ -37,19 +36,17 @@ def register():
     # forgot to set the MIME type to 'application/json'
     #print ('data from client:', request)
     username = request.form["username"]
-    password = ""
+    password = request.form["password"]
     secret_status = request.form["secret_status"]
     try:
-      password = request.form["password"]
       user = auth.create_user_with_email_and_password(username, password)
-      from helper import sanitize
     except:
       return jsonify({'error': 'Incorrect username or password'}), 400
     return jsonify(user)
+  return jsonify({'error': 'Incorrect username or password'}), 400
+
 
 @bp.route("/login", methods=("GET", "POST"))
-@cross_origin()
-
 def login():
   """
   Login a new user 
@@ -69,7 +66,6 @@ def login():
 
 
 @bp.route('/logout')
-@cross_origin()
 def logout():
   check_userToken()
   session.pop('userToken', None)

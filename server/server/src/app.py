@@ -15,9 +15,6 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 db = firebase.database()
 
-import auth
-app.register_blueprint(auth.bp)
-
 @app.route('/')
 def index():
   context = {'message':'Hello MiliDoc Server :)'}
@@ -25,6 +22,10 @@ def index():
   response = make_response(template)
   response.headers['Cache-Control'] = 'public, max-age=300, s-maxage=600'
   return response
+
+  
+import auth
+app.register_blueprint(auth.bp)
 
 import search
 app.register_blueprint(search.bp)
