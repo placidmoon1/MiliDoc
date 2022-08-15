@@ -16,14 +16,19 @@ CORS(bp)
 
 default_domain = "@rok.mil"
 
-def check_userToken():
+def check_userToken(option):
   if (session.get("userToken") is not None):
     userToken = session["userToken"]
     try:
       decoded_token = auth.get_account_info(userToken)
-      return (decoded_token["users"][0]["email"])
     except requests.exceptions.HTTPError:
       return "invalid request"
+    if option == "email":
+      return (decoded_token["users"][0]["email"])
+    elif option == "token":
+      return userToken
+
+        
   return "invalid request"
 
 @bp.route("/register", methods=("GET", "POST"))
@@ -71,9 +76,9 @@ def logout():
   session.pop('userToken', None)
   return jsonify({'status': 'Logged out successfully:)'}), 200
 
-@bp.route('/getuserinfo')
+@bp.route('/user/getemail')
 def getuserinfo():
-  userToken = check_userToken()
+  userToken = check_userToken("token")
   if userToken == "invalid request":
     return jsonify({'status': 'Invalid token'}), 400
-  return auth.get_account_info(userToken), 200
+  return auth.get_account_info(userToken)["users"][0]["email"], 200
