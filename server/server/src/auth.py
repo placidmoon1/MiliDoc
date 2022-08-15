@@ -70,3 +70,10 @@ def logout():
   check_userToken()
   session.pop('userToken', None)
   return jsonify({'status': 'Logged out successfully:)'}), 200
+
+@bp.route('/getuserinfo')
+def getuserinfo():
+  userToken = check_userToken()
+  if userToken == "invalid request":
+    return jsonify({'status': 'Invalid token'}), 400
+  return auth.get_account_info(userToken), 200

@@ -20,9 +20,32 @@ def check_text():
   """
   if request.method == "POST":
     text = request.form["text"].split() #split on all whitespace
-    sanitized = []
-    for word in text:
-      sanitized.append(sanitize(word, ""))
+    l_data = db.child("limitWords").order_by_child("limit_word").get()
+    r_data = db.child("restrictedWords").order_by_child("restricted_word").get()
+
+    sanitized = {}
+    for word_ind in range(len(text)):
+    #for each word
+      is_limited = 0
+      is_restricted = 0
+      sugg_word = ''
+      for lim_word in l_data.each():
+        if lim_word.val()["limit_word"] == text[word_ind]:
+          is_limited = 1
+          sugg_word = lim_word.val()["sugg_word"]
+          break
+
+      for restricted_Word in r_data.each():
+        if restricted_Word.val()["restricted_word"] == text[word_ind]:
+          is_restricted = 1
+          break
+      sanitized[word_ind] = {
+        "original_word": text[word_ind],
+        "word_ind": word_ind,
+        "is_limited": is_limited,
+        "is_restricted": is_restricted,
+        "sugg_word": sugg_word
+      }
     return sanitized, 200
   else:
     return "/check/test (POST) splits text input by space, and preserves Korean, English, and numbers", 200

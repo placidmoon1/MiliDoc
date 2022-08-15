@@ -94,6 +94,48 @@ def process_restrictedWords(filepath, data_type):
     f.write(restricted_words)
     f.close()
 
+def process_words(fps, data_srcs):
+  words_dict = {}
+  data_num = 0
+  data_details = {
+    1: {
+      "word_num": 0, # field number 
+      "ko_def": -1,   # korean defintion field # 
+      "eng_def": 2,  # english defintion field # 
+    }, 
+    5: {
+      "word_num": 1, # word field # 
+      "ko_def": 4,   # korean defintion field # 
+      "eng_def": 3,  # english defintion field # 
+    }
+  }
+  
+  for fp in fps:
+
+    csv_rdr = csv.reader(open(fp, 'r'))
+    row_num = 0
+    for row in csv_rdr:
+      if row_num == 0:
+        row_num += 1
+        continue
+      if row[1] != '': #there exists a limitWord for the src
+        src = ''
+        if data_num == 0:
+          src = 'naver_restricted'
+        if data_num == 1:
+          src = 'jyp_bubble_restricted'
+        restricted_data = {'src': src, 'restricted_word': row[1]}
+        restricted_dict[db.generate_key()] = restricted_data
+    
+    data_num += 1
+
+
+
+  #processing csv data done
+  restricted_words = json.dumps(restricted_dict)
+  with open("restricted_words.json", "w") as f:
+    f.write(restricted_words)
+    f.close()
 if __name__ == '__main__':
   fp1 = "/home/placid/competitions/MiliDoc/server/server/src/raw_data/mil_opendata.csv" 
   fp2 = "/home/placid/competitions/MiliDoc/server/server/src/raw_data/mil_haengjung.csv" 
