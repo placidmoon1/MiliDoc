@@ -1,5 +1,6 @@
 from flask import Flask, render_template, make_response, url_for, session, request
 from flask_cors import CORS, cross_origin
+from flask_sqlalchemy import SQLAlchemy
 import os
 import pyrebase
 

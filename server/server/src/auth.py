@@ -72,7 +72,7 @@ def login():
 
 @bp.route('/logout')
 def logout():
-  check_userToken()
+  check_userToken("token")
   session.pop('userToken', None)
   return jsonify({'status': 'Logged out successfully:)'}), 200
 
