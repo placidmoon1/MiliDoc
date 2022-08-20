@@ -2,21 +2,64 @@ import Head from "next/head";
 import styles from "../styles/Analyze.module.css";
 import { Formik, Form, Field } from "formik";
 import { Textarea, Button, FormControl } from "@chakra-ui/react";
+import { Tooltip } from "@chakra-ui/react";
 import Header from "../components/Header";
-import { useRouter } from "next/router";
 import axios from "axios";
-
+import Loader from "../components/Loader";
 import { useState } from "react";
 
 export default function Analyze() {
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [originalText, setOriginalText] = useState("");
+  const [textData, setTextData] = useState([]);
 
   const reset = () => {
     setOriginalText("");
     setSubmitted(false);
     return;
+  };
+
+  const styleTextResult = (textList) => {
+    var result = textList.map((wordData) => {
+      // if (wordData.abandon_exist 1== 1) {
+      //   return (
+      //     <span key={wordData.word_ind}>
+      //       <Tooltip label={"Limited: " + wordData.sugg_word} aria-label="Limited Tooltip">
+      //         <span
+      //           className={styles.limitedWord}
+      //         >
+      //           {wordData.word}
+      //         </span>
+      //       </Tooltip>
+      //       {" "}
+      //     </span>
+      //   );
+      // }
+      if (wordData.abandon_exist) {
+        return (
+          <span key={wordData.word_ind}>
+            <Tooltip label={"금칙어"} aria-label="Restricted Tooltip">
+              <span className={styles.restrictedWord}>{wordData.word}</span>
+            </Tooltip>
+          </span>
+        );
+      } else if (wordData.forbidden !== "") {
+        return (
+          <span key={wordData.word_ind}>
+            <Tooltip
+              label={"권고사항: " + wordData.forbidden}
+              aria-label="Limited Tooltip"
+            >
+              <span className={styles.limitedWord}>{wordData.word}</span>
+            </Tooltip>
+          </span>
+        );
+      } else {
+        return <span key={wordData.word_ind}>{wordData.word}</span>;
+      }
+    });
+    return result;
   };
 
   return (
@@ -27,13 +70,21 @@ export default function Analyze() {
       </Head>
       <Header />
       <div className={styles.container}>
-        {submitted ? (
+        {isLoading ? (
+          <Loader />
+        ) : submitted ? (
           <div className={styles.resultContainer}>
-            <p>{originalText}</p>
-            <div className={styles.buttonContainer}>
-              <Button onClick={reset} variant="solid" style={{marginTop: "1rem"}}>
-                다시하기
-              </Button>
+            <div className={styles.textResultContainer}>
+              <p>{styleTextResult(textData)}</p>
+              <div className={styles.buttonContainer}>
+                <Button
+                  onClick={reset}
+                  variant="solid"
+                  style={{ marginTop: "1rem" }}
+                >
+                  다시하기
+                </Button>
+              </div>
             </div>
           </div>
         ) : (
@@ -58,12 +109,13 @@ export default function Analyze() {
                   },
                 }).then((res) => {
                   console.log(res);
+                  setTextData(res.data);
                   // if (res.status === 201) router.push("/results");
                   // else actions.setSubmitting(false);
+                  setIsLoading(false);
+                  setSubmitted(true);
+                  actions.setSubmitting(false);
                 });
-                setIsLoading(false);
-                setSubmitted(true);
-                actions.setSubmitting(false);
               }}
             >
               {(props) => (
@@ -93,6 +145,12 @@ export default function Analyze() {
                     >
                       검사하기
                     </Button>
+                    <p style={{ fontWeight: 600 }}>
+                      단어 수:{" "}
+                      {props.values.body === ""
+                        ? 0
+                        : props.values.body.trim().split(/\s+/).length}
+                    </p>
                   </div>
                 </Form>
               )}

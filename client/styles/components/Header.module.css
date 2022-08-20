@@ -27,6 +27,15 @@
   justify-content: flex-end;
 }
 
+.navigationContainer Button {
+  color: #27447c;
+  padding: 0 0.7rem;
+}
+
+.navigationContainer Button:hover {
+  background-color: #ebefff;
+}
+
 .navigationContainer .iconTextView:hover {
   font-weight: 700;
   cursor: pointer;
@@ -34,6 +43,22 @@
 }
 
 .navigationContainer .iconTextView {
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.leftContainer {
+  display: flex;
+}
+
+.leftContainer .iconTextView:hover {
+  font-weight: 700;
+  cursor: pointer;
+  color: #27447c;
+}
+
+.leftContainer .iconTextView {
   display:flex;
   flex-direction: row;
   align-items: center;
