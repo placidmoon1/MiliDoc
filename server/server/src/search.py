@@ -8,7 +8,6 @@ import requests
 ssl._create_default_https_context = ssl._create_unverified_context
 
 from mySecrets import firebaseConfig, ko_dict_api_key
-from helper import sanitize
 from pathlib import Path
 
 cur_path = str(Path(__file__).resolve().parent)

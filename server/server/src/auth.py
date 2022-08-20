@@ -5,7 +5,6 @@ from flask_cors import cross_origin, CORS
 import pyrebase
 
 from mySecrets import firebaseConfig
-from helper import sanitize
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -16,18 +15,18 @@ CORS(bp)
 
 default_domain = "@rok.mil"
 
-def check_userToken(option):
-  if (session.get("userToken") is not None):
-    print(session.get("userToken"))
-    userToken = session["userToken"]
+def check_uid(option):
+  if (session.get("uid") is not None):
+    print(session.get("uid"))
+    uid = session["uid"]
     try:
-      decoded_token = auth.get_account_info(userToken)
+      decoded_token = auth.get_account_info(uid)
     except requests.exceptions.HTTPError:
       return "invalid request"
     if option == "email":
       return (decoded_token["users"][0]["email"])
     elif option == "token":
-      return userToken
+      return uid
 
         
   return "invalid request"
@@ -46,7 +45,8 @@ def register():
     secret_status = request.form["secret_status"]
     try:
       user = auth.create_user_with_email_and_password(username, password)
-      session["userToken"] = user["idToken"]
+      res = make_response('register success, inserting cookie')
+      res.set_cookie("uid", user["idToken"])
       return user, 200
     except:
       return jsonify({'error': 'Invalid request type'}), 400
@@ -66,21 +66,21 @@ def login():
     password = request.form["password"]
     try:
       user = auth.sign_in_with_email_and_password(username, password)
-      session['userToken'] = user["idToken"]
-      return jsonify({'status': 'Good Copy :)'}), 200
+      res = make_response('login success, good copy')
+      res.set_cookie("uid", user["idToken"])
+      return res, 200
     except requests.exceptions.HTTPError:
       return jsonify({'error': 'Incorrect username or password'}), 400
 
 
 @bp.route('/logout')
 def logout():
-  check_userToken("token")
-  session.pop('userToken', None)
+  check_uid("token")
+  session.pop('uid', None)
   return jsonify({'status': 'Logged out successfully:)'}), 200
 
 @bp.route('/user/getemail')
 def getuserinfo():
-  userToken = check_userToken("token")
-  if userToken == "invalid request":
+  if 'uid' not in request.cookies:
     return jsonify({'status': 'Invalid token'}), 400
-  return auth.get_account_info(userToken)["users"][0]["email"], 200
+  return auth.get_account_info(request.cookies.get("uid"))["users"][0]["email"], 200

@@ -3,7 +3,6 @@ from flask_cors import cross_origin, CORS
 import pyrebase
 
 from mySecrets import firebaseConfig
-from helper import sanitize
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()

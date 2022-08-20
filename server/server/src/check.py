@@ -3,7 +3,6 @@ from flask_cors import cross_origin, CORS
 import pyrebase, re
 
 from mySecrets import firebaseConfig
-from helper import sanitize
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
@@ -41,7 +40,7 @@ def check_text():
 
     global raw_text_morphs 
     raw_text_morphs = tokenizer.morphs(raw_text)
-    print("check() raw text morphs", raw_text_morphs)
+    #print("check() raw text morphs", raw_text_morphs)
     import time
 
     start = time.time()
