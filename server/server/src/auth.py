@@ -45,10 +45,11 @@ def register():
     secret_status = request.form["secret_status"]
     try:
       user = auth.create_user_with_email_and_password(username, password)
+      session["userToken"] = user["idToken"]
+      return user, 200
     except:
-      return jsonify({'error': 'Incorrect username or password'}), 400
-    return jsonify(user)
-  return jsonify({'error': 'Incorrect username or password'}), 400
+      return jsonify({'error': 'Invalid request type'}), 400
+  return jsonify({'error': 'Invalid request type'}), 400
 
 
 @bp.route("/login", methods=("GET", "POST"))

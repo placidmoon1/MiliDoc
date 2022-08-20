@@ -1,14 +1,16 @@
+from pydoc import cli
 import pandas as pd
 from konlpy.tag import Mecab
-from client_input import raw_text_morphs
+from check import raw_text_morphs
 from new_ngram import ngram
 tokenizer = Mecab()
 
 from pathlib import Path
-cur_path = str(Path(__file__).resolve().parent)
+cur_path = str(Path(__file__).resolve().parent )
 df_forbidden = pd.read_csv(cur_path + '/forbidden_words.csv')
 
 def mark_forbidden_pre(dict):
+    #print('in mark_forbidden_pre')
     df_old_list = df_forbidden['금칙어'].astype(str).tolist()
     df_list = []
     df_ind_list = []
@@ -28,7 +30,7 @@ def mark_forbidden_pre(dict):
     client_input_li = raw_text_morphs
     client_input_li_len = len(client_input_li)
     total_li = []
-
+    #print(client_input_li_len)
     for i in range(client_input_li_len):
         total_li.append(i)
 

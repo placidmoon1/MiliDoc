@@ -1,6 +1,6 @@
 import pandas as pd
 from konlpy.tag import Mecab
-from client_input import raw_text_morphs
+from check import raw_text_morphs
 from new_ngram import ngram
 tokenizer = Mecab()
 from pathlib import Path
