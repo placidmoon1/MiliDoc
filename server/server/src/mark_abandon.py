@@ -47,7 +47,6 @@
 #     return dict
 import pandas as pd
 from konlpy.tag import Mecab
-from check import raw_text_morphs
 from new_ngram import ngram
 tokenizer = Mecab()
 
@@ -57,6 +56,7 @@ cur_path = str(Path(__file__).resolve().parent)
 df_abandon = pd.read_csv(cur_path + '/abandon_words.csv')
 
 def find_ngram(len_token):
+    from check import raw_text_morphs
     dict = {len_token : ngram(len_token, raw_text_morphs)}
     return dict
 
@@ -66,7 +66,7 @@ def mark_abandon(dict):
 
     for word in df_old_list:
         df_list.append(tokenizer.morphs(word))
-
+    from check import raw_text_morphs
     client_input_li = raw_text_morphs
     client_input_li_len = len(client_input_li)
     total_li = []

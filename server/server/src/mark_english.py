@@ -1,6 +1,5 @@
 import pandas as pd
 from konlpy.tag import Mecab
-from check import raw_text_morphs
 from new_ngram import ngram
 tokenizer = Mecab()
 from pathlib import Path
@@ -24,7 +23,7 @@ def mark_english_pre(dict):
             else:
                 df_list.append(df_old_list[i])
                 df_ind_list.append(i)
-
+    from check import raw_text_morphs
     client_input_li = raw_text_morphs
     client_input_li_len = len(client_input_li)
     total_li = []
@@ -42,6 +41,7 @@ def mark_english_pre(dict):
     return df_ind_list, english_exist_li
 
 def find_ngram(len_token):
+    from check import raw_text_morphs
     dict = {len_token : ngram(len_token, raw_text_morphs)}
     return dict
 

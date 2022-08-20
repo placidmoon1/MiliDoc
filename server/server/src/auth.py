@@ -18,6 +18,7 @@ default_domain = "@rok.mil"
 
 def check_userToken(option):
   if (session.get("userToken") is not None):
+    print(session.get("userToken"))
     userToken = session["userToken"]
     try:
       decoded_token = auth.get_account_info(userToken)

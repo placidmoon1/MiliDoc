@@ -41,6 +41,7 @@ def check_text():
 
     global raw_text_morphs 
     raw_text_morphs = tokenizer.morphs(raw_text)
+    print("check() raw text morphs", raw_text_morphs)
     import time
 
     start = time.time()
@@ -55,6 +56,7 @@ def check_text():
     mark_forbidden(output_dict) # 1) forbidden_exists: 금칙어존재여부 2) forbidden: 금지어 존재한다면 바꿀수 있는 단어
     if print_flag:
       print("start2", time.time() - start) # 2.5
+      #print(output_dict)
     mark_abandon(output_dict) # 1) abandon_exist: 금지어존재여부
     if print_flag:
       print("start3", time.time() - start) #5.86
