@@ -37,7 +37,7 @@ def mark_english_pre(dict):
         total_li.append(i)
 
     for num in total_li:
-        dict[num]["english_exist"] = 0
+        #dict[num]["english_exist"] = 0
         dict[num]["english"] = ""
     return df_ind_list, english_exist_li
 
@@ -72,7 +72,7 @@ def mark_english(dict):
             english_word = df_forbidden['영문명'][find_location]
             word_location = li_ngram_token.index(token_word_sentence)
             for i in range(word_location, word_location + len_word_morphs):
-                dict[i]["english_exist"] = 1
+                #dict[i]["english_exist"] = 1
                 dict[i]["english"] = "see previous"
             dict[word_location]["english"] = english_word
 

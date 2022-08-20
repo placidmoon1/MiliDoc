@@ -33,7 +33,6 @@ def check_text():
     from pathlib import Path
 
     cur_path = str(Path(__file__).resolve().parent)
-    print_flag = 0
 
     df_abandon = pd.read_csv(cur_path + '/abandon_words.csv')
     df_forbidden = pd.read_csv(cur_path + '/forbidden_words.csv')
@@ -46,13 +45,13 @@ def check_text():
 
     start = time.time()
 
-    print_flag = 0
+    print_flag = True
 
     output_dict = {}
     mark_noun(raw_text, output_dict) # 1)word 2) noun: 고유어 여부 3) word_length: key해당하는 단어의 길이
     if print_flag:
       print("start1", time.time() - start) #0.03
-      print(output_dict)
+      #print(output_dict)
     mark_forbidden(output_dict) # 1) forbidden_exists: 금칙어존재여부 2) forbidden: 금지어 존재한다면 바꿀수 있는 단어
     if print_flag:
       print("start2", time.time() - start) # 2.5
@@ -69,8 +68,8 @@ def check_text():
     #순서가 뒤바껴도 되는 위 다른 함수들과 달리, 딕셔너리 리스트를 반환함. 무조건 마지막에 써야하는 함수.
     final_list = output_list(output_dict) #1)jump: 단어간 띄어쓰기를 표시해줌 ) jump_change: 이전 단어를 기점으로 줄바꿈 일어남을 나타냄
 
-    if print_flag:
-      print(final_list)
+    """if print_flag:
+      print(final_list)"""
     print("time to process:", time.time() - start)
     return final_list, 200
   else:

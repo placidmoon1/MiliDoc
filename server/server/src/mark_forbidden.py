@@ -35,7 +35,7 @@ def mark_forbidden_pre(dict):
         total_li.append(i)
 
     for num in total_li:
-        dict[num]["forbidden_exist"] = 0
+        #dict[num]["forbidden_exist"] = 0
         dict[num]["forbidden"] = ""
 
     return df_ind_list, df_list
@@ -76,7 +76,7 @@ def mark_forbidden(dict):
             right_word = df_forbidden['단어명'][find_location]
             word_location = li_ngram_token.index(token_word_sentence)
             for i in range(word_location, word_location + len_word_morphs):
-                dict[i]["forbidden_exist"] = 1
+                #dict[i]["forbidden_exist"] = 1
                 is_forbidden_li.append(i)
                 dict[i]["forbidden"] = "see previous"
             dict[word_location]["forbidden"] = right_word
