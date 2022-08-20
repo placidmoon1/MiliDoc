@@ -1,5 +1,6 @@
 from flask import Flask, render_template, make_response, url_for, session, request
 from flask_cors import CORS, cross_origin
+from flask_sqlalchemy import SQLAlchemy
 import os
 import pyrebase
 
@@ -15,9 +16,6 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 db = firebase.database()
 
-import auth
-app.register_blueprint(auth.bp)
-
 @app.route('/')
 def index():
   context = {'message':'Hello MiliDoc Server :)'}
@@ -25,6 +23,10 @@ def index():
   response = make_response(template)
   response.headers['Cache-Control'] = 'public, max-age=300, s-maxage=600'
   return response
+
+  
+import auth
+app.register_blueprint(auth.bp)
 
 import search
 app.register_blueprint(search.bp)
