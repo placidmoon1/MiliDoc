@@ -55,6 +55,11 @@
   font-weight: 600;
 }
 
+.acronymWord {
+  background-color: #05b36b;
+  font-weight: 600;
+}
+
 .buttonContainer Button {
   color: #FFFFFF;
   background-color: #27447c;
