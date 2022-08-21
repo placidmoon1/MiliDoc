@@ -25,7 +25,6 @@ const Result = () => {
         q,
     })
       .then((res) => {
-        console.log(res);
         setWordData(res.data);
         setIsLoading(false);
         // if (res.status === 201) router.push("/results");
