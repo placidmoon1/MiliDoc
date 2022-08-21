@@ -3,7 +3,8 @@ from flask_cors import cross_origin, CORS
 import pyrebase
 import pandas as pd
 import ssl
-import requests
+import http, json
+from urllib.parse   import urlencode
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -16,16 +17,20 @@ auth = firebase.auth()
 db = firebase.database()
 
 bp = Blueprint("search", __name__, url_prefix="/search")
-CORS(bp)
-
-@bp.route('/word')
+CORS_ALLOW_ORIGIN="*,*"
+CORS_EXPOSE_HEADERS="*,*"
+CORS_ALLOW_HEADERS="content-type,*"
+cors = CORS(bp, origins=CORS_ALLOW_ORIGIN.split(","), allow_headers=CORS_ALLOW_HEADERS.split(",") , expose_headers= CORS_EXPOSE_HEADERS.split(","))
+@bp.route('/word', methods=["GET"])
 def search_word():
   """
     a sanitized query (s_query) should:
     (1) 
   """
-  query = request.form["query"]  
-  query_lang = request.form["lang"]
+  print(request.form)
+  query_lang = request.args.get("lang")
+  query = request.args.get("query")
+
   # NOTE: Requires updating indexOn if using order_by_child!!
   df_forbidden = pd.read_csv(cur_path + '/forbidden_words.csv')
   df_abandon = pd.read_csv(cur_path + '/abandon_words.csv')
@@ -48,19 +53,28 @@ def search_word():
         forbidden = df_forbid_ko.iloc[0]["금칙어"]
     if not df_abandon.empty:
       abandon = 1
-
-    URL = 'https://stdict.korean.go.kr/api/search.do?key={ko_dict_api_key}&req_type=json&q={query}'
+    
+    URL = 'stdict.korean.go.kr'
     #NOTE: verify=false if SSL requests!!!!!!!!!!!
-    URL = URL.format(ko_dict_api_key=ko_dict_api_key, query=query)
-    response = requests.get(URL, verify=False)
+    path = '/api/search.do?' + urlencode({'key': ko_dict_api_key, 'q':query, 'req_type': 'json'}, encoding='utf-8')
+    app = Flask(__name__)
+    app.logger.info("path", path)
+    connection = http.client.HTTPSConnection(URL)
+    connection.request("GET", path)
+    response = connection.getresponse()
+    string = response.read()
+    #print("response", string)
+    json_obj = json.loads(string)
+    #print(json_obj)
     try:
-      if len(response.json()["channel"]["item"]) >= 2:
-        def1 = response.json()["channel"]["item"][0]["sense"]["definition"]
-        def2 = response.json()["channel"]["item"][1]["sense"]["definition"]
-      if len(response.json()["channel"]["item"]) == 1:
-        def1 = response.json()["channel"]["item"][0]["sense"]["definition"]
+      if len(json_obj["channel"]["item"]) >= 2:
+        def1 = json_obj["channel"]["item"][0]["sense"]["definition"]
+        def2 = json_obj["channel"]["item"][1]["sense"]["definition"]
+      if len(json_obj["channel"]["item"]) == 1:
+        def1 = json_obj["channel"]["item"][0]["sense"]["definition"]
     except:
       pass
+    
   elif query_lang == "en":
     english = query
     query = query.lower()
@@ -74,12 +88,16 @@ def search_word():
         forbidden = df_forbid_en.iloc[0]["금칙어"]
   else:
     return jsonify({'error': 'Invalid language'}), 400
-
-  return jsonify({
+  res = make_response(jsonify({
     "korean": korean,
     "english": english,
     "abandon": abandon,
     "forbidden": forbidden,
     "def1": def1,
     "def2": def2
-  }), 200
+  }))
+  res.headers.add('Access-Control-Allow-Origin', '*')
+  res.headers.add('Access-Control-Allow-Credentials', 'true')
+
+
+  return res, 200

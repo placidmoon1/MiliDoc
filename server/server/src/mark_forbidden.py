@@ -9,8 +9,7 @@ from pathlib import Path
 cur_path = str(Path(__file__).resolve().parent )
 df_forbidden = pd.read_csv(cur_path + '/forbidden_words.csv')
 
-def mark_forbidden_pre(word_dict):
-    #print('in mark_forbidden_pre')
+def mark_forbidden_pre(dict):
     df_old_list = df_forbidden['금칙어'].astype(str).tolist()
     df_list = []
     df_ind_list = []
@@ -30,24 +29,23 @@ def mark_forbidden_pre(word_dict):
     client_input_li = raw_text_morphs
     client_input_li_len = len(client_input_li)
     total_li = []
-    #print(client_input_li_len)
+
     for i in range(client_input_li_len):
         total_li.append(i)
 
     for num in total_li:
-        #word_dict[num]["forbidden_exist"] = 0
-        word_dict[num]["forbidden"] = ""
+        dict[num]["forbidden_exist"] = 0
+        dict[num]["forbidden"] = ""
 
     return df_ind_list, df_list
 
 def find_ngram(len_token):
     from check import raw_text_morphs
-    #print("raw_text_morphs", raw_text_morphs)
-    word_dict = {len_token : ngram(len_token, raw_text_morphs)}
-    return word_dict
+    dict = {len_token : ngram(len_token, raw_text_morphs)}
+    return dict
 
-def mark_forbidden(word_dict):
-    function_result = mark_forbidden_pre(word_dict)
+def mark_forbidden(dict):
+    function_result = mark_forbidden_pre(dict)
     ind_li = function_result[0]
     forbid_li = function_result[1]
     is_forbidden_li = []
@@ -64,26 +62,28 @@ def mark_forbidden(word_dict):
 
     len_li = list(set(len_li))
 
-    ngram_word_dict = {}
+    ngram_dict = {}
     for i in len_li:
-        ngram_word_dict.update(find_ngram(i))
-        #print("ngram_word_dict:", ngram_word_dict, i)
+        ngram_dict.update(find_ngram(i))
+
+    char_morphs = ["NNG", "NNP", "VV", "VA", "MM", "IC", "XPN", "XR", "SL"]
 
     for word in tmp:
         token_word = word
         token_word_sentence = "".join(token_word)
         len_word_morphs = len(token_word)
-        #print("word:", word, token_word_sentence, len_word_morphs)
-        li_ngram_token = ngram_word_dict.get(len_word_morphs)
-        if token_word_sentence in li_ngram_token:
-            #print(token_word_sentence)
-            find_location = ind_li[tmp.index(word)]
-            right_word = df_forbidden['단어명'][find_location]
-            word_location = li_ngram_token.index(token_word_sentence)
-            for i in range(word_location, word_location + len_word_morphs):
-                #print(word_dict)
-                #word_dict[i]["forbidden_exist"] = 1
-                is_forbidden_li.append(i)
-                word_dict[i]["forbidden"] = right_word
-            word_dict[word_location]["forbidden"] = right_word
-    return word_dict
+        li_ngram_token = ngram_dict.get(len_word_morphs)
+        if token_word_sentence in li_ngram_token: #char_type
+            ind = li_ngram_token.index(token_word_sentence)
+            if dict[ind]['char_type'] in char_morphs:
+                find_location = ind_li[tmp.index(word)]
+                right_word = df_forbidden['단어명'][find_location]
+                word_location = li_ngram_token.index(token_word_sentence)
+                for i in range(word_location, word_location + len_word_morphs):
+                    dict[i]["forbidden_exist"] = 1
+                    #print(dict[ind])
+                    is_forbidden_li.append(i)
+                    dict[i]["forbidden"] = "see previous"
+                dict[word_location]["forbidden"] = right_word
+
+    return dict

@@ -11,6 +11,10 @@ RUN apt-get install -y g++ default-jdk default-jre
 COPY src/ /app
 WORKDIR /app
 
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
 RUN pip install nltk
 RUN pip install konlpy
 

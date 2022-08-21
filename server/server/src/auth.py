@@ -11,7 +11,10 @@ bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 auth = firebase.auth()
 db = firebase.database()
-CORS(bp)
+CORS_ALLOW_ORIGIN="*,*"
+CORS_EXPOSE_HEADERS="*,*"
+CORS_ALLOW_HEADERS="content-type,*"
+cors = CORS(bp, allow_headers=CORS_ALLOW_HEADERS.split(","), supports_credentials = True)
 
 default_domain = "@rok.mil"
 
@@ -46,13 +49,14 @@ def register():
     try:
       user = auth.create_user_with_email_and_password(username, password)
       res = make_response('register success, inserting cookie')
-      res.set_cookie("uid", user["idToken"])
+      res.headers.add('Access-Control-Allow-Credentials', 'true')
+      res.set_cookie("uid", user["idToken"], samesite='None', secure=True)
       return user, 200
     except:
       return jsonify({'error': 'Invalid request type'}), 400
   return jsonify({'error': 'Invalid request type'}), 400
 
-
+@cross_origin()
 @bp.route("/login", methods=("GET", "POST"))
 def login():
   """
@@ -64,9 +68,15 @@ def login():
     #print ('data from client:', request)
     username = request.form["username"]
     password = request.form["password"]
+    print("http origin", request.environ.get('HTTP_ORIGIN', '*'))
+
     try:
       user = auth.sign_in_with_email_and_password(username, password)
       res = make_response('login success, good copy')
+      res.headers.add('Access-Control-Allow-Origin', request.environ.get('HTTP_ORIGIN', '*'))
+      res.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS, GET');
+      res.headers.add('Access-Control-Allow-Credentials', 'true')
+      res.headers.add('Access-Control-Allow-Headers', 'access-control-allow-origin,content-type');
       res.set_cookie("uid", user["idToken"])
       return res, 200
     except requests.exceptions.HTTPError:
@@ -81,6 +91,15 @@ def logout():
 
 @bp.route('/user/getemail')
 def getuserinfo():
+  #print(request.headers)
+  #print("http origin", request.environ.get('HTTP_ORIGIN', '*'))
+  print('cookies', request.cookies.get('uid'))
   if 'uid' not in request.cookies:
     return jsonify({'status': 'Invalid token'}), 400
-  return auth.get_account_info(request.cookies.get("uid"))["users"][0]["email"], 200
+  res = make_response(auth.get_account_info(request.cookies.get("uid"))["users"][0]["email"])
+  res.headers.add('Access-Control-Allow-Origin', request.environ.get('HTTP_ORIGIN', '*'))
+  res.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS, GET');
+  res.headers.add('Access-Control-Allow-Credentials', 'true')
+  res.headers.add('Access-Control-Allow-Headers', 'access-control-allow-origin,content-type');
+
+  return res, 200

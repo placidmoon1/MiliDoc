@@ -3,13 +3,69 @@ from konlpy.tag import Mecab
 okt = Okt()
 tokenizer = Mecab()
 
+def find_space(text):
+    len_text = len(text)
+
+    li = []
+    li_new_line = []
+    li_new_space = []
+
+    if text[0] != ' ' or text[0] != '\n':
+        li.append(-1)
+
+    for ind, word in enumerate(text):
+        if word == "\n" or word == " ":
+            #print('hit')
+            li.append(ind)
+            if word == "\n":
+                li_new_line.append(ind)
+                #print('newline hit', li_new_line)
+            else:
+                li_new_space.append(ind)
+                #print('space hit', li_new_space)
+    
+    if li[-1] != len_text:
+        li.append(len_text)
+
+    li_answ = []
+    li_q = []
+    li_real = []
+
+    #print('li_new_space', li_new_space)
+
+
+    tmp = 0
+    for i in range(len(li) - 1):
+        if li[i + 1] - li[i] != 1:
+            tmp += li[i + 1] - li[i] - 1
+            li_q.append(li[i + 1] - li[i] - 1)
+            li_answ.append(tmp)
+            li_real.append(li[i] + 1)
+
+    return li_q, li_real, li_new_line, li_new_space
+
 def mark_noun(text, dict):
-    len_word = 0
-    for word in enumerate(tokenizer.pos(text)):
-        len_word += len(word[1][0])
-        if word[1][1][0] == 'N':
-            dict[word[0]] = {'word': word[1][0], 'noun': 1, 'word_length': len_word}
+    li_gap = find_space(text)[0]
+    li_location_= find_space(text)[1]
+    token_len = 0
+    tmp_start = 0
+
+    for ind, word in enumerate(tokenizer.pos(text)):
+        token = word[0]
+        gap = len(token)
+        token_len += len(token)
+        start = li_location_[0]+tmp_start
+
+        if li_gap[0] == token_len:
+            token_len = len(token)
+            dict[ind] = {'word': word[0], 'char_type': word[1], 'start_index': start, 'end_index': start+token_len-1}
+            del li_gap[0]
+            del li_location_[0]
+            token_len = 0
+            tmp_start = 0
+
         else:
-            dict[word[0]] = {'word': word[1][0], 'noun': 0, 'word_length': len_word}
+            dict[ind] = {'word': word[0], 'char_type': word[1], 'start_index': start, 'end_index': start + gap - 1}
+            tmp_start = token_len
 
     return dict

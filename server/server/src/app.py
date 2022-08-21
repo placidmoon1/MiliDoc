@@ -7,9 +7,12 @@ import pyrebase
 from mySecrets import firebaseConfig, app_secret_key
 
 app = Flask(__name__)
-cors = CORS(app) #NOTE: see https://stackoverflow.com/questions/26980713/solve-cross-origin-resource-sharing-with-flask
+cors = CORS(app, supports_credentials=True)
+#NOTE: see https://stackoverflow.com/questions/26980713/solve-cross-origin-resource-sharing-with-flask
+#NOTE: see https://kosaf04pyh.tistory.com/152 for ENABLING COOKIES
 app.secret_key = app_secret_key
 app.config['CORS_HEADERS'] = 'Content-Type'
+app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()

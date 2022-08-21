@@ -36,12 +36,13 @@ def mark_english_pre(dict):
         total_li.append(i)
 
     for num in total_li:
-        #dict[num]["english_exist"] = 0
+        dict[num]["english_exist"] = 0
         dict[num]["english"] = ""
     return df_ind_list, english_exist_li
 
 def find_ngram(len_token):
     from check import raw_text_morphs
+
     dict = {len_token : ngram(len_token, raw_text_morphs)}
     return dict
 
@@ -62,18 +63,21 @@ def mark_english(dict):
     for i in len_li:
         ngram_dict.update(find_ngram(i))
 
+    char_morphs = ["NNG", "NNP", "VV", "VA", "MM", "IC", "XPN", "XR"]
     for word in eng_li:
         token_word = word
         token_word_sentence = "".join(token_word)
         len_word_morphs = len(token_word)
         li_ngram_token = ngram_dict.get(len_word_morphs)
         if token_word_sentence in li_ngram_token:
-            find_location = ind_li[eng_li.index(word)]
-            english_word = df_forbidden['영문명'][find_location]
-            word_location = li_ngram_token.index(token_word_sentence)
-            for i in range(word_location, word_location + len_word_morphs):
-                #dict[i]["english_exist"] = 1
-                dict[i]["english"] = "see previous"
-            dict[word_location]["english"] = english_word
+            ind = li_ngram_token.index(token_word_sentence)
+            if dict[ind]['char_type'] in char_morphs:
+                find_location = ind_li[eng_li.index(word)]
+                english_word = df_forbidden['영문명'][find_location]
+                word_location = li_ngram_token.index(token_word_sentence)
+                for i in range(word_location, word_location + len_word_morphs):
+                    dict[i]["english_exist"] = 1
+                    dict[i]["english"] = "see previous"
+                dict[word_location]["english"] = english_word
 
     return dict

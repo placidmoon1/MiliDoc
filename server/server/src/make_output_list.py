@@ -1,30 +1,31 @@
-def output_list(dict):
+from mark_noun import find_space
+
+def output_list(text, dict):
+    #print(dict)
     dict_li = []
+    line = find_space(text)[2]
+    space = find_space(text)[3]
+    #print('line', line)
+    #print('space', space)
     for key,value in dict.items():
-        if value['space'] == 1:
-            dict_li.append(value)
-            dict_li.append({
-                "word": " ",
-                "abandon_exist": 0,
-                "english": "",
-                "forbidden": "",
-                "line_change": 0,
-                "noun": 0,
-                "space": 0,
-                "word_length": 0
-            })
+        del value['forbidden_exist']
+        del value['english_exist']
+        del value['char_type']
+        del value['start_index']
+        del value['end_index']
+        word = value['word']
+        if type(word) == int:
+            if word in line:
+                value['word'] = "\n"
+                dict_li.append(value)
+                #print(key, value, dict_li)
+            elif word in space:
+                value['word'] = " "
+                dict_li.append(value)
+                #print(key, value, dict_li)
         else:
             dict_li.append(value)
-        if value['line_change'] == 1:
-            dict_li.append({
-                "word": "\n",
-                "abandon_exist": 0,
-                "english": "",
-                "forbidden": "",
-                "line_change": 0,
-                "noun": 0,
-                "space": 0,
-                "word_length": 0
-            })
+    #print(dict)
+    #print(dict_li)
 
     return dict_li

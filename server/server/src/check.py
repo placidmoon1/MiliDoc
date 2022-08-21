@@ -62,12 +62,12 @@ def check_text():
     mark_english(output_dict) # 1) english_exist: 영문존재여부 2) english: 존재한다면 어떻게 바꿀 수 있는지
     if print_flag:
       print("start4", time.time() - start)
-    mark_space(raw_text, output_dict) #1) space: 단어 뛰어쓰기 여부 2) line_change: 줄바꾸는 함수 존재여부
+    mark_space(output_dict) #1) space: 단어 뛰어쓰기 여부 2) line_change: 줄바꾸는 함수 존재여부
     if print_flag:
       print("start5", time.time() - start)
 
     #순서가 뒤바껴도 되는 위 다른 함수들과 달리, 딕셔너리 리스트를 반환함. 무조건 마지막에 써야하는 함수.
-    final_list = output_list(output_dict) #1)jump: 단어간 띄어쓰기를 표시해줌 ) jump_change: 이전 단어를 기점으로 줄바꿈 일어남을 나타냄
+    final_list = output_list(raw_text, output_dict) #1)jump: 단어간 띄어쓰기를 표시해줌 ) jump_change: 이전 단어를 기점으로 줄바꿈 일어남을 나타냄
 
     """if print_flag:
       print(final_list)"""
