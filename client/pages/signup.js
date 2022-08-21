@@ -10,6 +10,9 @@ import Image from "next/image";
 
 const Signup = () => {
   const router = useRouter();
+
+  // useEffect -> if user is authorized, redirect to homepage
+
   return (
     <div>
       <Head>

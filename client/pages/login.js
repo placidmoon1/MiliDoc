@@ -12,6 +12,8 @@ const Login = () => {
   const router = useRouter();
   const [isError, setIsError] = useState(false);
 
+  // useEffect -> if user is authorized, redirect to homepage
+
   return (
     <div>
       <Head>
@@ -30,7 +32,6 @@ const Login = () => {
                 var bodyFormData = new FormData();
                 bodyFormData.append("username", values.username);
                 bodyFormData.append("password", values.password);
-                console.log("lolololo")
                 axios({
                   method: "post",
                   url: process.env.NEXT_PUBLIC_API_ROUTE + "auth/login",
@@ -39,7 +40,7 @@ const Login = () => {
                     "Content-Type": "multipart/form-data",
                   },
                 }).then((res) => {
-                  console.log("hello")
+                  console.log("hello");
                   console.log(res);
                   if (res.status === 200) {
                     axios({

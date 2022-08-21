@@ -2,7 +2,7 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Header from "../components/Header";
 import Card from "../components/Card";
-import { MdDocumentScanner, MdUploadFile, MdSearch } from "react-icons/md";
+import { MdDocumentScanner, MdSearch } from "react-icons/md";
 
 export default function Home() {
   return (

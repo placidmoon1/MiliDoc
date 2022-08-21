@@ -33,7 +33,8 @@
   justify-content: space-between;
   border: 1px solid #dfdfdf;
   border-radius: 10px;
-  white-space: pre-wrap;
+  white-space: pre-line;
+  /* white-space: pre-wrap; */
 }
 
 .buttonContainer {
