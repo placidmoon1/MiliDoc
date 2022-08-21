@@ -77,8 +77,8 @@ const Result = () => {
                 ) : (
                   <h1>{q}</h1>
                 )}
-                <div style={{display: "flex", flexDirection: "row"}}>
-                  {wordData.abandon !== 1 && wordData.forbidden === "" ? (
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                  {wordData.abandon === 0 && wordData.forbidden === "" && wordData.korean !== "" ? (
                     <Tag
                       size={"lg"}
                       key={"lg"}
@@ -134,9 +134,13 @@ const Result = () => {
               </div>
               <hr />
               {wordData.def1 === "" ? (
-                <div>
-                  <h3>죄송합니다. 단어/뜻을 못 찾았습니다.</h3>
-                </div>
+                wordData.korean === "" ? (
+                  <div>
+                    <h3>죄송합니다. 단어/뜻을 못 찾았습니다.</h3>
+                  </div>
+                ) : (
+                  ""
+                )
               ) : (
                 <div className={styles.defContainer}>
                   {wordData.def1 !== "" ? <h3>1. {wordData.def1}</h3> : ""}
