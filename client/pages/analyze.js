@@ -22,20 +22,6 @@ export default function Analyze() {
 
   const styleTextResult = (textList) => {
     var result = textList.map((wordData) => {
-      // if (wordData.abandon_exist 1== 1) {
-      //   return (
-      //     <span key={wordData.word_ind}>
-      //       <Tooltip label={"Limited: " + wordData.sugg_word} aria-label="Limited Tooltip">
-      //         <span
-      //           className={styles.limitedWord}
-      //         >
-      //           {wordData.word}
-      //         </span>
-      //       </Tooltip>
-      //       {" "}
-      //     </span>
-      //   );
-      // }
       if (wordData.abandon_exist) {
         return (
           <span key={wordData.word_ind}>
@@ -90,7 +76,8 @@ export default function Analyze() {
         ) : (
           <div className={styles.inputContainer}>
             <h2 style={{ fontWeight: 600, fontSize: "1.5rem" }}>
-              금칙어 및 등등을 MiliDoc에서 검사를 하십쇼!
+              당신의 텍스트를 넣어주세요. Milidoc이 당신만의 가이드가
+              되어줍니다.
             </h2>
             <br />
             <Formik
@@ -102,16 +89,13 @@ export default function Analyze() {
                 setOriginalText(values.body);
                 axios({
                   method: "post",
-                  url: process.env.NEXT_PUBLIC_API_ROUTE + "check/text",
+                  url: process.env.NEXT_PUBLIC_API_ROUTE + "check/text2",
                   data: bodyFormData,
                   headers: {
                     "Content-Type": "multipart/form-data",
                   },
                 }).then((res) => {
-                  console.log(res);
                   setTextData(res.data);
-                  // if (res.status === 201) router.push("/results");
-                  // else actions.setSubmitting(false);
                   setIsLoading(false);
                   setSubmitted(true);
                   actions.setSubmitting(false);

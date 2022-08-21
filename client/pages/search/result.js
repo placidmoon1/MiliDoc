@@ -4,29 +4,37 @@ import styles from "../../styles/Result.module.css";
 import Header from "../../components/Header";
 import { useRouter } from "next/router";
 import axios from "axios";
+import Loader from "../../components/Loader";
+import { Tag } from "@chakra-ui/react";
 
 const Result = () => {
   const router = useRouter();
   const { q, l } = router.query;
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+  const [wordData, setWordData] = useState({});
+
   useEffect(() => {
-    var bodyFormData = new FormData();
-    bodyFormData.append("text", q);
-    bodyFormData.append("language", l);
     axios({
-      method: "post",
-      url: process.env.NEXT_PUBLIC_API_ROUTE + "check/text",
-      data: bodyFormData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }).then((res) => {
-      setIsLoading(false);
-      console.log(res);
-      // if (res.status === 201) router.push("/results");
-      // else actions.setSubmitting(false);
-    });
-  }, [{ q, l }]);
+      method: "get",
+      url:
+        process.env.NEXT_PUBLIC_API_ROUTE +
+        "search/word?lang=" +
+        l +
+        "&query=" +
+        q,
+    })
+      .then((res) => {
+        setWordData(res.data);
+        setIsLoading(false);
+        // if (res.status === 201) router.push("/results");
+        // else actions.setSubmitting(false);
+      })
+      .catch((res) => {
+        setIsError(true);
+        setIsLoading(false);
+      });
+  }, []);
 
   return (
     <div>
@@ -36,17 +44,89 @@ const Result = () => {
       </Head>
       <Header />
       <div className={styles.container}>
-        <div className={styles.inputContainer}>
-          <div>
-            <h1>{q}</h1>
-            <hr />
-            <h3>
-              1. 컴퓨터에서, 프로그램을 새로 개발하였을 때에 오류가 없는지
-              최종적으로 검사하는 일2. 문자 대신에 그림이나 부호를 사용하여
-              지능을 재는 검사
-            </h3>
+        {isLoading ? (
+          <Loader />
+        ) : isError ? (
+          <div className={styles.inputContainer}>
+            <div>
+              <div className={styles.titleContainer}>
+                <h1>{q}</h1>
+              </div>
+              <hr />
+              <div>
+                <h3>죄송합니다. 단어를 못 찾았습니다.</h3>
+              </div>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className={styles.inputContainer}>
+            <div>
+              <div className={styles.titleContainer}>
+                {l == "ko" ? (
+                  wordData.english !== "" ? (
+                    <h1>
+                      {q} | {wordData.english}
+                    </h1>
+                  ) : (
+                    <h1>{q}</h1>
+                  )
+                ) : (
+                  <h1>{q}</h1>
+                )}
+                {wordData.abandon !== 1 && wordData.forbidden === "" ? (
+                  <Tag
+                    size={"lg"}
+                    key={"lg"}
+                    variant="solid"
+                    colorScheme="green"
+                    style={{ height: "1rem" }}
+                  >
+                    금칙어/금지어 아님
+                  </Tag>
+                ) : (
+                  ""
+                )}
+                {wordData.abandon === 1 ? (
+                  <Tag
+                    size={"lg"}
+                    key={"lg"}
+                    variant="solid"
+                    colorScheme="red"
+                    style={{ height: "1rem" }}
+                  >
+                    금칙어
+                  </Tag>
+                ) : (
+                  ""
+                )}
+                {wordData.forbidden !== "" ? (
+                  <Tag
+                    size={"lg"}
+                    key={"lg"}
+                    variant="solid"
+                    colorScheme="yellow"
+                    style={{ height: "1rem" }}
+                  >
+                    권고사항: {wordData.forbidden}
+                  </Tag>
+                ) : (
+                  ""
+                )}
+              </div>
+              <hr />
+              {wordData.def1 === "" ? (
+                <div>
+                  <h3>죄송합니다. 단어를 못 찾았습니다.</h3>
+                </div>
+              ) : (
+                <div className={styles.defContainer}>
+                  {wordData.def1 !== "" ? <h3>1. {wordData.def1}</h3> : ""}
+                  {wordData.def2 !== "" ? <h3>2. {wordData.def2}</h3> : ""}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

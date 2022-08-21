@@ -17,7 +17,7 @@ const Search = () => {
     const router = useRouter();
 
   const [value, setValue] = useState("");
-  const [searchLanguage, setSearchLanguage] = useState("kor");
+  const [searchLanguage, setSearchLanguage] = useState("ko");
 
   const searchValue = () => {
     router.push({ pathname: "/search/result", query: { q: value, l: searchLanguage } });
@@ -72,8 +72,8 @@ const Search = () => {
           <div style={{ marginTop: "15px" }}>
             <RadioGroup onChange={setSearchLanguage} value={searchLanguage}>
               <Stack direction="row">
-                <Radio value="kor">한국어</Radio>
-                <Radio value="eng">영어</Radio>
+                <Radio value="ko">한국어</Radio>
+                <Radio value="en">영어</Radio>
               </Stack>
             </RadioGroup>
           </div>
