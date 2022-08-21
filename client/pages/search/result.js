@@ -25,6 +25,7 @@ const Result = () => {
         q,
     })
       .then((res) => {
+        console.log(res);
         setWordData(res.data);
         setIsLoading(false);
         // if (res.status === 201) router.push("/results");
@@ -70,53 +71,72 @@ const Result = () => {
                   ) : (
                     <h1>{q}</h1>
                   )
+                ) : wordData.korean !== "" ? (
+                  <h1>
+                    {q} | {wordData.korean}
+                  </h1>
                 ) : (
                   <h1>{q}</h1>
                 )}
-                {wordData.abandon !== 1 && wordData.forbidden === "" ? (
-                  <Tag
-                    size={"lg"}
-                    key={"lg"}
-                    variant="solid"
-                    colorScheme="green"
-                    style={{ height: "1rem" }}
-                  >
-                    금칙어/금지어 아님
-                  </Tag>
-                ) : (
-                  ""
-                )}
-                {wordData.abandon === 1 ? (
-                  <Tag
-                    size={"lg"}
-                    key={"lg"}
-                    variant="solid"
-                    colorScheme="red"
-                    style={{ height: "1rem" }}
-                  >
-                    금칙어
-                  </Tag>
-                ) : (
-                  ""
-                )}
-                {wordData.forbidden !== "" ? (
-                  <Tag
-                    size={"lg"}
-                    key={"lg"}
-                    variant="solid"
-                    colorScheme="yellow"
-                    style={{ height: "1rem" }}
-                  >
-                    권고사항: {wordData.forbidden}
-                  </Tag>
-                ) : (
-                  ""
-                )}
+                <div style={{display: "flex", flexDirection: "row"}}>
+                  {wordData.abandon !== 1 && wordData.forbidden === "" ? (
+                    <Tag
+                      size={"lg"}
+                      key={"lg"}
+                      variant="solid"
+                      colorScheme="green"
+                      style={{ height: "1rem" }}
+                    >
+                      금칙어/금지어 아님
+                    </Tag>
+                  ) : (
+                    ""
+                  )}
+                  {wordData.abandon === 1 ? (
+                    <Tag
+                      size={"lg"}
+                      key={"lg"}
+                      variant="solid"
+                      colorScheme="red"
+                      style={{ height: "1rem" }}
+                    >
+                      금칙어
+                    </Tag>
+                  ) : (
+                    ""
+                  )}
+                  {wordData.forbidden !== "" ? (
+                    <Tag
+                      size={"lg"}
+                      key={"lg"}
+                      variant="solid"
+                      colorScheme="yellow"
+                      style={{ height: "1rem" }}
+                    >
+                      권고사항: {wordData.forbidden}
+                    </Tag>
+                  ) : (
+                    ""
+                  )}
+                  {wordData.acronym !== "" ? (
+                    <Tag
+                      size={"lg"}
+                      key={"lg"}
+                      variant="solid"
+                      colorScheme="gray"
+                      style={{ height: "1rem", marginLeft: "0.5rem" }}
+                    >
+                      약어: {wordData.acronym}
+                    </Tag>
+                  ) : (
+                    ""
+                  )}
+                </div>
               </div>
               <hr />
               {wordData.def1 === "" ? (
                 <div>
-                  <h3>죄송합니다. 단어를 못 찾았습니다.</h3>
+                  <h3>죄송합니다. 단어/뜻을 못 찾았습니다.</h3>
                 </div>
               ) : (
                 <div className={styles.defContainer}>

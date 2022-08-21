@@ -46,3 +46,42 @@
   color: #FFFFFF;
   background: #27447c;
 } */
+
+.creditsContainer {
+  padding: 2px 16px;
+  transition: 0.3s;
+  background-color: white;
+  min-height: 10rem;
+  margin: 0.75rem 1rem;
+  padding: 1.5rem 1.5rem;
+  border-radius: 5px;
+  width: 100%;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+.creditsContainer h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.creditsContainer h2 {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.creditsContainer p {
+  font-size: 0.65rem;
+}
+
+.creditsContainer a {
+  color: #27447c;
+  font-weight: 500
+}
+
+.creditsContainer hr {
+  height: 1px;
+  width: 3rem;
+  border-top: 3px solid #27447c;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
