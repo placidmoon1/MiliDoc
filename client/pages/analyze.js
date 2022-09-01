@@ -41,7 +41,18 @@ export default function Analyze() {
             </Tooltip>
           </span>
         );
-      }  else {
+      } else if (wordData.acronym !== "" && wordData.acronym !== null) {
+        return (
+          <span key={wordData.word_ind}>
+            <Tooltip
+              label={wordData.acronym+ ": " + wordData.english}
+              aria-label="Limited Tooltip"
+            >
+              <span className={styles.acronymWord}>{wordData.word}</span>
+            </Tooltip>
+          </span>
+        );
+      } else {
         return <span key={wordData.word_ind}>{wordData.word}</span>;
       }
     });
